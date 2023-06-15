@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 // import routerEditing from 'vue-router';
 import { useTasks } from '../stores/tasks';
 // import { routerEditing } from '../router/index';
 
 const tasksStore = useTasks();
+const show = ref(true);
 // const routerEditing(id: string) = routerEditing();
 // const editingStore = useEditing();
 
@@ -33,67 +35,85 @@ function pad(n: number, s = String(n)) {
 //     tasks._rawValue. = this.list.filter(item => item.id !== id)
 //   }
 // };
+
+const homeButton = {
+  id: 'button-home',
+  class: 'home__button',
+  to: '/create',
+};
 </script>
 
 <template>
-  <div class="home">
-    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
-    <form class="container" v-for="item in tasksStore.tasks" :key="item.id">
-    <!-- @remove="removeFromList(item.id) -->
-      <div class="home__tasks">
-        {{ item.title }}
-      </div>
-      <div class="home__tasks">
-        <button type="button" class="home__completed"
-          v-if="item.completed" @click="tasksStore.changes(item.id)">
-          Виконано
-        </button>
-        <button type="button" class="home__completed" v-else @click="tasksStore.changes(item.id)">
-          Не виконано
-        </button>
-      </div>
-      <div class="home__tasks">
-        {{ (item.dueTo.getFullYear() + '-'
-          + pad(item.dueTo.getMonth()+1) + '-'
-          + pad(item.dueTo.getDate())) }}
-      </div>
-      <section class="home__tasks section__tasks-button">
+  <Transition>
+    <div class="home" v-if="show">
+      <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
+      <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
+      <form class="container" v-for="item in tasksStore.tasks" :key="item.id">
+      <!-- @remove="removeFromList(item.id) -->
+        <div class="home__tasks">
+          {{ item.title }}
+        </div>
+        <div class="home__tasks">
+          <button type="button" class="home__completed"
+            v-if="item.completed" @click="tasksStore.changes(item.id)">
+            Виконано
+          </button>
+          <button type="button" class="home__completed" v-else @click="tasksStore.changes(item.id)">
+            Не виконано
+          </button>
+        </div>
+        <div class="home__tasks">
+          {{ (item.dueTo.getFullYear() + '-'
+            + pad(item.dueTo.getMonth()+1) + '-'
+            + pad(item.dueTo.getDate())) }}
+        </div>
+        <section class="home__tasks section__tasks-button">
+          <router-link
+            class="home__button-edit"
+            :to="routerEditing(item.id)"
+          >
+            Редагування задачі
+          </router-link>
+            <!-- to="/editing" :props=item.id>Редагування задачі</router-link> -->
+          <button
+            type="button"
+            @click="tasksStore.remove(item.id)"
+            class="home__button-delete"
+          >
+            Видалення задачі
+          </button>
+        </section>
+      </form>
+      <section class="section__button">
         <router-link
-          class="home__button-edit"
-          :to="routerEditing(item.id)"
+          type="button"
+          v-bind="homeButton"
+          @click="show = !show"
         >
-          Редагування задачі
+          Cтворення новоЇ задачі
         </router-link>
-          <!-- to="/editing" :props=item.id>Редагування задачі</router-link> -->
-        <button type="button" @click="tasksStore.remove(item.id)" class="home__button-delete">
-          Видалення задачі
-        </button>
       </section>
-    </form>
-    <section class="section__button">
-      <router-link class="home__button" to="/create">Cтворення новоЇ задачі</router-link>
-    </section>
-    <div class="statistics">
-      <section class="statistics__section">
-        <p class="statistics__quantity">
-          Загальна кількість задач - {{tasksStore.tasks.length}}
-        </p>
-      </section>
-      <section class="statistics__section">
-        <p class="statistics__performed">
-          Кількість виконаних задач -
-          {{tasksStore.tasks.filter((tasks) => tasks.completed === true).length}}
-        </p>
-      </section>
-      <section class="statistics__section">
-        <p class="statistics__notexecuted">
-          Кількість невиконаних задач -
-          {{tasksStore.tasks.filter((tasks) => tasks.completed === false).length}}
-        </p>
-      </section>
+      <div class="statistics">
+        <section class="statistics__section">
+          <p class="statistics__quantity">
+            Загальна кількість задач - {{tasksStore.tasks.length}}
+          </p>
+        </section>
+        <section class="statistics__section">
+          <p class="statistics__performed">
+            Кількість виконаних задач -
+            {{tasksStore.tasks.filter((tasks) => tasks.completed === true).length}}
+          </p>
+        </section>
+        <section class="statistics__section">
+          <p class="statistics__notexecuted">
+            Кількість невиконаних задач -
+            {{tasksStore.tasks.filter((tasks) => tasks.completed === false).length}}
+          </p>
+        </section>
+      </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 // <!-- <script setup lang="ts">
@@ -168,5 +188,12 @@ function pad(n: number, s = String(n)) {
 }
 .statistics__section {
   margin: 0 2%;
+}
+.v-enter-active, .v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from, .v-leave-to {
+  opacity: 0;
 }
 </style>
