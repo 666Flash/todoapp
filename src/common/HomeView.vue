@@ -48,42 +48,49 @@ const homeButton = {
     <div class="home" v-if="show">
       <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
       <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
-      <form class="container" v-for="item in tasksStore.tasks" :key="item.id">
-      <!-- @remove="removeFromList(item.id) -->
-        <div class="home__tasks">
-          {{ item.title }}
-        </div>
-        <div class="home__tasks">
-          <button type="button" class="home__completed"
-            v-if="item.completed" @click="tasksStore.changes(item.id)">
-            Виконано
-          </button>
-          <button type="button" class="home__completed" v-else @click="tasksStore.changes(item.id)">
-            Не виконано
-          </button>
-        </div>
-        <div class="home__tasks">
-          {{ (item.dueTo.getFullYear() + '-'
-            + pad(item.dueTo.getMonth()+1) + '-'
-            + pad(item.dueTo.getDate())) }}
-        </div>
-        <section class="home__tasks section__tasks-button">
-          <router-link
-            class="home__button-edit"
-            :to="routerEditing(item.id)"
-          >
-            Редагування задачі
-          </router-link>
-            <!-- to="/editing" :props=item.id>Редагування задачі</router-link> -->
-          <button
-            type="button"
-            @click="tasksStore.remove(item.id)"
-            class="home__button-delete"
-          >
-            Видалення задачі
-          </button>
-        </section>
-      </form>
+      <TransitionGroup tag="ul" name="fade">
+        <form class="container" v-for="item in tasksStore.tasks" :key="item.id">
+        <!-- @remove="removeFromList(item.id) -->
+          <div class="home__tasks">
+            {{ item.title }}
+          </div>
+          <div class="home__tasks">
+            <button type="button" class="home__completed"
+              v-if="item.completed" @click="tasksStore.changes(item.id)">
+              Виконано
+            </button>
+            <button
+              type="button"
+              class="home__completed"
+              v-else
+              @click="tasksStore.changes(item.id)"
+            >
+              Не виконано
+            </button>
+          </div>
+          <div class="home__tasks">
+            {{ (item.dueTo.getFullYear() + '-'
+              + pad(item.dueTo.getMonth()+1) + '-'
+              + pad(item.dueTo.getDate())) }}
+          </div>
+          <section class="home__tasks section__tasks-button">
+            <router-link
+              class="home__button-edit"
+              :to="routerEditing(item.id)"
+            >
+              Редагування задачі
+            </router-link>
+              <!-- to="/editing" :props=item.id>Редагування задачі</router-link> -->
+            <button
+              type="button"
+              @click="tasksStore.remove(item.id)"
+              class="home__button-delete"
+            >
+              Видалення задачі
+            </button>
+          </section>
+        </form>
+      </TransitionGroup>
       <section class="section__button">
         <router-link
           type="button"
@@ -189,6 +196,18 @@ const homeButton = {
 .statistics__section {
   margin: 0 2%;
 }
+
+.fade-move, .fade-enter-active, .fade-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+/* .fade-leave-active {
+  position: absolute;
+} */
+
 .v-enter-active, .v-leave-active {
   transition: opacity 0.5s ease;
 }

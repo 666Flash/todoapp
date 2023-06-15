@@ -19,7 +19,7 @@ import { useTasks } from './stores/tasks';
 
 const tasksIncrement = useTasks();
 tasksIncrement.increment('Murphy', false, new Date());
-tasksIncrement.increment('Yxbxmzxm', true, new Date());
+tasksIncrement.increment('Yxbxmzxm', true, new Date(Date.parse('2023-04-27')));
 
 // methods: {
 //   removeFromList(id) {
