@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 // import routerEditing from 'vue-router';
 import { useTasks } from '../stores/tasks';
 // import { routerEditing } from '../router/index';
 
 const tasksStore = useTasks();
 const show = ref(true);
+const sortStan = ref(true);
 // const routerEditing(id: string) = routerEditing();
 // const editingStore = useEditing();
 
@@ -19,6 +20,26 @@ function pad(n: number, s = String(n)) {
   return s.length < 2 ? `0${s}` : s;
 }
 
+function sortByStatus(sort: boolean) {
+  tasksStore.tasks = tasksStore.tasks.sort((a, b) => {
+    if (sort) {
+      if (a.completed > b.completed) {
+        return 1;
+      }
+      if (a.completed < b.completed) {
+        return -1;
+      }
+    } else {
+      if (a.completed < b.completed) {
+        return 1;
+      }
+      if (a.completed > b.completed) {
+        return -1;
+      }
+    }
+    return 0;
+  });
+}
 // tasksStore.increment('Murphy', false);
 // tasksStore.increment('Yxbxmzxm', true);
 // console.log(tasksStore);
@@ -101,6 +122,7 @@ const homeButton = {
         </router-link>
       </section>
       <div class="statistics">
+        <button @click="sortByStatus(sortStan), sortStan = !sortStan">Cортувати по статусу</button>
         <section class="statistics__section">
           <p class="statistics__quantity">
             Загальна кількість задач - {{tasksStore.tasks.length}}
