@@ -18,8 +18,10 @@ import { useTasks } from './stores/tasks';
 // tasks.push(new Task(uid(), 'Yxbxmzxm', true, new Date()));
 
 const tasksIncrement = useTasks();
-tasksIncrement.increment('Murphy', false, new Date());
+tasksIncrement.increment('Murphy', false, new Date(Date.parse('2023-06-30')));
+tasksIncrement.increment('gasjdjss', true, new Date(Date.parse('2023-06-30')));
 tasksIncrement.increment('Yxbxmzxm', true, new Date(Date.parse('2023-04-27')));
+tasksIncrement.increment('agshsjajaj', false, new Date(Date.parse('2023-04-27')));
 
 // methods: {
 //   removeFromList(id) {

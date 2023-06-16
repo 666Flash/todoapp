@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 // import routerEditing from 'vue-router';
 import { useTasks } from '../stores/tasks';
 // import { routerEditing } from '../router/index';
@@ -40,9 +40,28 @@ function sortByStatus(sort: boolean) {
     return 0;
   });
 }
+
+function groupBy(key: string) {
+  return function group(array: any) {
+    return array.reduce((acc: any, obj: any) => {
+      const property = obj[key];
+      acc[property] = acc[property] || [];
+      acc[property].push(obj);
+      return acc;
+    }, {});
+  };
+}
+const groupByDueTo = groupBy('dueTo');
+// function groupByDueTo() {
+//   const rezult = tasksStore.tasks.group(({ completed }) => completed);
+//   // const rezult = Array.prototype.group.call(tasksStore.tasks, (dueTo) => dueTo);
+// }
+
+console.log(groupByDueTo(tasksStore.tasks));
+
 // tasksStore.increment('Murphy', false);
 // tasksStore.increment('Yxbxmzxm', true);
-// console.log(tasksStore);
+// console.log(tasksStore.tasks[0]);
 
 // methods: {
 //   removeFromList(id) {
@@ -70,46 +89,48 @@ const homeButton = {
       <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
       <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
       <TransitionGroup tag="ul" name="fade">
-        <form class="container" v-for="item in tasksStore.tasks" :key="item.id">
-        <!-- @remove="removeFromList(item.id) -->
-          <div class="home__tasks">
-            {{ item.title }}
-          </div>
-          <div class="home__tasks">
-            <button type="button" class="home__completed"
-              v-if="item.completed" @click="tasksStore.changes(item.id)">
-              Виконано
-            </button>
-            <button
-              type="button"
-              class="home__completed"
-              v-else
-              @click="tasksStore.changes(item.id)"
-            >
-              Не виконано
-            </button>
-          </div>
-          <div class="home__tasks">
-            {{ (item.dueTo.getFullYear() + '-'
-              + pad(item.dueTo.getMonth()+1) + '-'
-              + pad(item.dueTo.getDate())) }}
-          </div>
-          <section class="home__tasks section__tasks-button">
-            <router-link
-              class="home__button-edit"
-              :to="routerEditing(item.id)"
-            >
-              Редагування задачі
-            </router-link>
-              <!-- to="/editing" :props=item.id>Редагування задачі</router-link> -->
-            <button
-              type="button"
-              @click="tasksStore.remove(item.id)"
-              class="home__button-delete"
-            >
-              Видалення задачі
-            </button>
-          </section>
+        <form class="home__group" v-for="items in groupByDueTo(tasksStore.tasks)" :key="items.id">
+          <form class="container" v-for="item in items" :key="item.id">
+          <!-- @remove="removeFromList(item.id) -->
+            <div class="home__tasks">
+              {{ item.title }}
+            </div>
+            <div class="home__tasks">
+              <button type="button" class="home__completed"
+                v-if="item.completed" @click="tasksStore.changes(item.id)">
+                Виконано
+              </button>
+              <button
+                type="button"
+                class="home__completed"
+                v-else
+                @click="tasksStore.changes(item.id)"
+              >
+                Не виконано
+              </button>
+            </div>
+            <div class="home__tasks">
+              {{ (item.dueTo.getFullYear() + '-'
+                + pad(item.dueTo.getMonth()+1) + '-'
+                + pad(item.dueTo.getDate())) }}
+            </div>
+            <section class="home__tasks section__tasks-button">
+              <router-link
+                class="home__button-edit"
+                :to="routerEditing(item.id)"
+              >
+                Редагування задачі
+              </router-link>
+                <!-- to="/editing" :props=item.id>Редагування задачі</router-link> -->
+              <button
+                type="button"
+                @click="tasksStore.remove(item.id)"
+                class="home__button-delete"
+              >
+                Видалення задачі
+              </button>
+            </section>
+          </form>
         </form>
       </TransitionGroup>
       <section class="section__button">
@@ -160,6 +181,9 @@ const homeButton = {
 <style scoped>
 .home {
   padding: 0% 1% 2%;
+}
+.home__group {
+  padding: 1%;
 }
 .container {
   display: flex;
