@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import HomeView from '../common/HomeView.vue';
+import HomeView from '@/pages/HomeView.vue';
+import { home, create, editing } from '@/router/routers';
 
 // export function routerEditing(id: string) {
 //   return {
@@ -9,25 +10,25 @@ import HomeView from '../common/HomeView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: home,
     name: 'home',
     component: HomeView,
   },
   {
-    path: '/create',
+    path: create,
     name: 'create',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../common/CreatesTasks.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '@/pages/CreatesTasks.vue'),
   },
   {
-    path: '/:id/edit',
+    path: editing,
     name: 'editing',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../common/EditingTasks.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '@/pages/EditingTasks.vue'),
     props: true,
   },
 ];

@@ -1,49 +1,63 @@
 <template>
-  <Transition>
-    <form class="create" v-if="show">
-      <header class="create__header">Сторінка створення задачі</header>
+  <div>{{ createsEditing.msg }}</div>
+  <form class="create" v-if="show">
+    <header class="create__header">Сторінка створення задачі</header>
+    <input
+      v-model.trim="title"
+      class="create__input"
+      :class="{ error: isRed }"
+      placeholder="Дані по задачі"/>
+    <div class="create__section">
+      <select class="create__select" v-model="completed">
+        <option v-for="item in completeds" :key="item.id" :value="item.completed">
+          {{ item.text }}
+        </option>
+      </select>
       <input
-        v-model.trim="title"
-        class="create__input"
-        :class="{ error: isRed }"
-        placeholder="Дані по задачі"/>
-      <div class="create__section">
-        <select class="create__select" v-model="completed">
-          <option v-for="item in completeds" :key="item.id" :value="item.completed">
-            {{ item.text }}
-          </option>
-        </select>
-        <input
-          class="create__date"
-          :class="{ errorDate: isRedDate }"
-          type="date"
-          v-model="departureDate"/>
-      </div>
-      <!-- <select v-model="test" class="create__select">
-        <option disabled value="">Будь ласка, оберіть варіант</option>
-        <option>Не виконано</option>
-        <option>Виконано</option>
-      </select> -->
-      <div class="create-section__button">
-        <router-link
-        type="button"
-        v-bind="createButton"
-        @click=choiceCompleted
-        >
-          <!-- <router-link type="button" v-bind="createButton" @click=addTask(title,completed)> -->
-          Створити
-        </router-link>
-        <button type="reset" v-bind="clearButton">Очистити</button>
-        <router-link v-bind="cancelButton" @click="show = !show">Скасувати</router-link>
-      </div>
-    </form>
-  </Transition>
+        class="create__date"
+        :class="{ errorDate: isRedDate }"
+        type="date"
+        v-model="departureDate"/>
+    </div>
+    <!-- <select v-model="test" class="create__select">
+      <option disabled value="">Будь ласка, оберіть варіант</option>
+      <option>Не виконано</option>
+      <option>Виконано</option>
+    </select> -->
+    <div class="create-section__button">
+      <router-link
+      type="button"
+      id="button-create"
+      class="create__button"
+      to="#"
+      @click=choiceCompleted
+      >
+        Створити
+      </router-link>
+      <button type="reset" id="button-clear" class="create__button">Очистити</button>
+      <router-link
+        id="button-cancel"
+        class="create__button"
+        to="/"
+        @click="show = !show"
+      >
+        Скасувати
+      </router-link>
+    </div>
+  </form>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import { useTasks } from '../stores/tasks';
+import { useTasks } from '@/stores/tasks';
+
+const createsEditing = defineComponent({
+  name: 'CreatesTasks',
+  props: {
+    msg: String,
+  },
+});
 
 const show = ref(true);
 function pad(n: number, s = String(n)) {
@@ -55,10 +69,9 @@ function dateToString(date: Date) {
 }
 const departureDate = ref(dateToString(new Date()));
 
-const tasksIncrement = useTasks();
+const taskStop = useTasks();
 const addTask = (title: string, completed: boolean, dueTo: string) => {
-  // tasksIncrement.increment(title, completed, new Date());
-  tasksIncrement.increment(title, completed, new Date(Date.parse(dueTo)));
+  taskStop.addtask(title, completed, new Date(Date.parse(dueTo)));
 };
 
 const title = ref('');
@@ -100,21 +113,6 @@ function choiceCompleted() {
     router.push('/');
   }
 }
-
-const createButton = {
-  id: 'button-create',
-  class: 'create__button',
-  to: '#',
-};
-const clearButton = {
-  id: 'button-clear',
-  class: 'create__button',
-};
-const cancelButton = {
-  id: 'button-cancel',
-  class: 'create__button',
-  to: '/',
-};
 </script>
 
 <style scoped>

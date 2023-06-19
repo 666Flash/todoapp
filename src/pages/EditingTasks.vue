@@ -1,42 +1,49 @@
 <template>
-  <Transition>
-    <form class="editing" v-if="show">
-      <header class="editing__header">Сторінка редагування задачі</header>
+  <form class="editing" v-if="show">
+    <header class="editing__header">Сторінка редагування задачі</header>
+    <input
+      v-model.trim="editingTitle"
+      class="editing__input"
+      :class="{ error: isRed }"/>
+    <div class="editing__section">
+      <select class="editing__select" v-model="editingCompleted">
+        <option v-for="item in completeds" :key="item.id" :value="item.completed">
+          {{ item.text }}
+        </option>
+      </select>
       <input
-        v-model.trim="editingTitle"
-        class="editing__input"
-        :class="{ error: isRed }"/>
-      <div class="editing__section">
-        <select class="editing__select" v-model="editingCompleted">
-          <option v-for="item in completeds" :key="item.id" :value="item.completed">
-            {{ item.text }}
-          </option>
-        </select>
-        <input
-          class="editing__date"
-          :class="{ errorDate: isRedDate }"
-          type="date"
-          v-model="departureDate"/>
-      </div>
-      <div class="editing-section__button">
-        <router-link
-        type="button"
-        v-bind="editingButton"
-        @click=choiceCompleted
-        >
-          Редагувати
-        </router-link>
-        <button type="reset" v-bind="clearButton">Очистити</button>
-        <router-link v-bind="cancelButton" @click="show = !show">Скасувати</router-link>
-      </div>
-    </form>
-  </Transition>
+        class="editing__date"
+        :class="{ errorDate: isRedDate }"
+        type="date"
+        v-model="departureDate"/>
+    </div>
+    <div class="editing-section__button">
+      <router-link
+      type="button"
+      id7="button-editing"
+      class="editing__button"
+      to="#"
+      @click=choiceCompleted
+      >
+        Редагувати
+      </router-link>
+      <button type="reset" id="button-clear" class="editing__button">Очистити</button>
+      <router-link
+        id="button-cancel"
+        class="editing__button"
+        to="/"
+        @click="show = !show"
+      >
+        Скасувати
+      </router-link>
+    </div>
+  </form>
 </template>
 
 <script setup lang="ts">
 import { ref, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
-import { useTasks } from '../stores/tasks';
+import { useTasks } from '@/stores/tasks';
 
 interface Props {
   id: string
@@ -98,21 +105,6 @@ function choiceCompleted() {
     router.push('/');
   }
 }
-
-const editingButton = {
-  id: 'button-editing',
-  class: 'editing__button',
-  to: '#',
-};
-const clearButton = {
-  id: 'button-clear',
-  class: 'editing__button',
-};
-const cancelButton = {
-  id: 'button-cancel',
-  class: 'editing__button',
-  to: '/',
-};
 </script>
 
 <style scoped>

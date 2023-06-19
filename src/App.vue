@@ -1,5 +1,7 @@
 <template>
-  <router-view/>
+  <Transition>
+    <router-view/>
+  </Transition>
   <!-- <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
@@ -10,18 +12,18 @@
 // import { ref } from 'vue';
 // import { uid } from 'uid/secure';
 // import Task from './composables/task';
-import { useTasks } from './stores/tasks';
+import { useTasks } from '@/stores/tasks';
 
 // const tasks = useTasks();
 // const tasks = ref<Task[]>([]);
 // tasks.push(new Task(uid(), 'Murphy', false, new Date()));
 // tasks.push(new Task(uid(), 'Yxbxmzxm', true, new Date()));
 
-const tasksIncrement = useTasks();
-tasksIncrement.increment('Murphy', false, new Date(Date.parse('2023-06-30')));
-tasksIncrement.increment('gasjdjss', true, new Date(Date.parse('2023-06-30')));
-tasksIncrement.increment('Yxbxmzxm', true, new Date(Date.parse('2023-04-27')));
-tasksIncrement.increment('agshsjajaj', false, new Date(Date.parse('2023-04-27')));
+const taskStop = useTasks();
+taskStop.addtask('Murphy', false, new Date(Date.parse('2023-06-30')));
+taskStop.addtask('gasjdjss', true, new Date(Date.parse('2023-06-30')));
+taskStop.addtask('Yxbxmzxm', true, new Date(Date.parse('2023-04-27')));
+taskStop.addtask('agshsjajaj', false, new Date(Date.parse('2023-04-27')));
 
 // methods: {
 //   removeFromList(id) {
