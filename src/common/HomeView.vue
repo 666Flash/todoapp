@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 // import routerEditing from 'vue-router';
 import { useTasks } from '../stores/tasks';
-// import { routerEditing } from '../router/index';
 
 const tasksStore = useTasks();
 const show = ref(true);
