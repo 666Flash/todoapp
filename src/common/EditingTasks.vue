@@ -1,34 +1,36 @@
 <template>
-  <form class="editing">
-    <header class="editing__header">Сторінка редагування задачі</header>
-    <input
-      v-model.trim="editingTitle"
-      class="editing__input"
-      :class="{ error: isRed }"/>
-    <div class="editing__section">
-      <select class="editing__select" v-model="editingCompleted">
-        <option v-for="item in completeds" :key="item.id" :value="item.completed">
-          {{ item.text }}
-        </option>
-      </select>
+  <Transition>
+    <form class="editing" v-if="show">
+      <header class="editing__header">Сторінка редагування задачі</header>
       <input
-        class="editing__date"
-        :class="{ errorDate: isRedDate }"
-        type="date"
-        v-model="departureDate"/>
-    </div>
-    <div class="editing-section__button">
-      <router-link
-      type="button"
-      v-bind="editingButton"
-      @click=choiceCompleted
-      >
-        Редагувати
-      </router-link>
-      <button type="reset" v-bind="clearButton">Очистити</button>
-      <router-link v-bind="cancelButton">Скасувати</router-link>
-    </div>
-  </form>
+        v-model.trim="editingTitle"
+        class="editing__input"
+        :class="{ error: isRed }"/>
+      <div class="editing__section">
+        <select class="editing__select" v-model="editingCompleted">
+          <option v-for="item in completeds" :key="item.id" :value="item.completed">
+            {{ item.text }}
+          </option>
+        </select>
+        <input
+          class="editing__date"
+          :class="{ errorDate: isRedDate }"
+          type="date"
+          v-model="departureDate"/>
+      </div>
+      <div class="editing-section__button">
+        <router-link
+        type="button"
+        v-bind="editingButton"
+        @click=choiceCompleted
+        >
+          Редагувати
+        </router-link>
+        <button type="reset" v-bind="clearButton">Очистити</button>
+        <router-link v-bind="cancelButton" @click="show = !show">Скасувати</router-link>
+      </div>
+    </form>
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -42,6 +44,7 @@ interface Props {
 const props = defineProps<Props>();
 const tasksEditing = useTasks();
 const router = useRouter();
+const show = ref(true);
 
 const editingTask = (editingId: string, title: string, completed: boolean, dueTo: string) => {
   tasksEditing.change(editingId, title, completed, new Date(Date.parse(dueTo)));
@@ -83,8 +86,7 @@ function choiceCompleted() {
     isRedDate.value = false;
   }
   if (departureDate.value.length === 10
-    && new Date(Date.parse(departureDate.value)) < new Date(Date.now())
-    && editingCompleted.value === false) {
+    && new Date(Date.parse(departureDate.value)) < new Date(Date.now() - 86400000)) {
     isRedDate.value = true;
     flag = false;
   } else {
@@ -153,5 +155,12 @@ const cancelButton = {
 }
 .errorDate {
   background-color: #fc6363;
+}
+.v-enter-active, .v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from, .v-leave-to {
+  opacity: 0;
 }
 </style>

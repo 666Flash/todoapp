@@ -1,41 +1,43 @@
 <template>
-  <form class="create">
-    <header class="create__header">Сторінка створення задачі</header>
-    <input
-      v-model.trim="title"
-      class="create__input"
-      :class="{ error: isRed }"
-      placeholder="Дані по задачі"/>
-    <div class="create__section">
-      <select class="create__select" v-model="completed">
-        <option v-for="item in completeds" :key="item.id" :value="item.completed">
-          {{ item.text }}
-        </option>
-      </select>
+  <Transition>
+    <form class="create" v-if="show">
+      <header class="create__header">Сторінка створення задачі</header>
       <input
-        class="create__date"
-        :class="{ errorDate: isRedDate }"
-        type="date"
-        v-model="departureDate"/>
-    </div>
-    <!-- <select v-model="test" class="create__select">
-      <option disabled value="">Будь ласка, оберіть варіант</option>
-      <option>Не виконано</option>
-      <option>Виконано</option>
-    </select> -->
-    <div class="create-section__button">
-      <router-link
-      type="button"
-      v-bind="createButton"
-      @click=choiceCompleted
-      >
-        <!-- <router-link type="button" v-bind="createButton" @click=addTask(title,completed)> -->
-        Створити
-      </router-link>
-      <button type="reset" v-bind="clearButton">Очистити</button>
-      <router-link v-bind="cancelButton">Скасувати</router-link>
-    </div>
-  </form>
+        v-model.trim="title"
+        class="create__input"
+        :class="{ error: isRed }"
+        placeholder="Дані по задачі"/>
+      <div class="create__section">
+        <select class="create__select" v-model="completed">
+          <option v-for="item in completeds" :key="item.id" :value="item.completed">
+            {{ item.text }}
+          </option>
+        </select>
+        <input
+          class="create__date"
+          :class="{ errorDate: isRedDate }"
+          type="date"
+          v-model="departureDate"/>
+      </div>
+      <!-- <select v-model="test" class="create__select">
+        <option disabled value="">Будь ласка, оберіть варіант</option>
+        <option>Не виконано</option>
+        <option>Виконано</option>
+      </select> -->
+      <div class="create-section__button">
+        <router-link
+        type="button"
+        v-bind="createButton"
+        @click=choiceCompleted
+        >
+          <!-- <router-link type="button" v-bind="createButton" @click=addTask(title,completed)> -->
+          Створити
+        </router-link>
+        <button type="reset" v-bind="clearButton">Очистити</button>
+        <router-link v-bind="cancelButton" @click="show = !show">Скасувати</router-link>
+      </div>
+    </form>
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -43,6 +45,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useTasks } from '../stores/tasks';
 
+const show = ref(true);
 function pad(n: number, s = String(n)) {
   return s.length < 2 ? `0${s}` : s;
 }
@@ -83,9 +86,9 @@ function choiceCompleted() {
   } else {
     isRedDate.value = false;
   }
+
   if (departureDate.value.length === 10
-    && new Date(Date.parse(departureDate.value)) < new Date(Date.now())
-    && completed.value === false) {
+    && new Date(Date.parse(departureDate.value)) < new Date(Date.now() - 86400000)) {
     isRedDate.value = true;
     flag = false;
   } else {
@@ -155,5 +158,12 @@ const cancelButton = {
 }
 .errorDate {
   background-color: #fc6363;
+}
+.v-enter-active, .v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from, .v-leave-to {
+  opacity: 0;
 }
 </style>
