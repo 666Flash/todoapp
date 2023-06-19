@@ -86,8 +86,7 @@ function choiceCompleted() {
     isRedDate.value = false;
   }
   if (departureDate.value.length === 10
-    && new Date(Date.parse(departureDate.value)) < new Date(Date.now())
-    && editingCompleted.value === false) {
+    && new Date(Date.parse(departureDate.value)) < new Date(Date.now() - 86400000)) {
     isRedDate.value = true;
     flag = false;
   } else {

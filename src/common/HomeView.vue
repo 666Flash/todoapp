@@ -12,7 +12,7 @@ const sortStan = ref(true);
 
 function routerEditing(id: string) {
   return {
-    path: `/edit/${id}`,
+    path: `/${id}/edit`,
   };
 }
 
@@ -41,6 +41,19 @@ function sortByStatus(sort: boolean) {
   });
 }
 
+function sortByDueTo() {
+  tasksStore.tasks = tasksStore.tasks.sort((a, b) => {
+    if (a.dueTo > b.dueTo) {
+      return 1;
+    }
+    if (a.dueTo < b.dueTo) {
+      return -1;
+    }
+    return 0;
+  });
+}
+sortByDueTo();
+
 function groupBy(key: string) {
   return function group(array: any) {
     return array.reduce((acc: any, obj: any) => {
@@ -52,12 +65,6 @@ function groupBy(key: string) {
   };
 }
 const groupByDueTo = groupBy('dueTo');
-// function groupByDueTo() {
-//   const rezult = tasksStore.tasks.group(({ completed }) => completed);
-//   // const rezult = Array.prototype.group.call(tasksStore.tasks, (dueTo) => dueTo);
-// }
-
-console.log(groupByDueTo(tasksStore.tasks));
 
 // tasksStore.increment('Murphy', false);
 // tasksStore.increment('Yxbxmzxm', true);
@@ -89,8 +96,20 @@ const homeButton = {
       <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
       <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
       <TransitionGroup tag="ul" name="fade">
-        <form class="home__group" v-for="items in groupByDueTo(tasksStore.tasks)" :key="items.id">
-          <form class="container" v-for="item in items" :key="item.id">
+        <TransitionGroup
+          class="home__group"
+          v-for="items in groupByDueTo(tasksStore.tasks)"
+          :key="items.id"
+          tag="ul"
+          name="fade"
+        >
+          <TransitionGroup
+            class="container"
+            v-for="item in items"
+            :key="item.id"
+            tag="ul"
+            name="fade"
+          >
           <!-- @remove="removeFromList(item.id) -->
             <div class="home__tasks">
               {{ item.title }}
@@ -110,13 +129,14 @@ const homeButton = {
               </button>
             </div>
             <div class="home__tasks">
-              {{ (item.dueTo.getFullYear() + '-'
-                + pad(item.dueTo.getMonth()+1) + '-'
-                + pad(item.dueTo.getDate())) }}
+              {{ (pad(item.dueTo.getDate()) + '.'
+                + pad(item.dueTo.getMonth()+1) + '.'
+                + item.dueTo.getFullYear()) }}
             </div>
             <section class="home__tasks section__tasks-button">
               <router-link
                 class="home__button-edit"
+                @click="show = !show"
                 :to="routerEditing(item.id)"
               >
                 Редагування задачі
@@ -130,8 +150,8 @@ const homeButton = {
                 Видалення задачі
               </button>
             </section>
-          </form>
-        </form>
+          </TransitionGroup>
+        </TransitionGroup>
       </TransitionGroup>
       <section class="section__button">
         <router-link
@@ -209,6 +229,10 @@ const homeButton = {
   padding: 1.5% 3%;
   margin: 2%;
   color: rgb(255, 255, 255);
+  background-color: rgb(200, 201, 198);
+  border: 1px solid rgb(200, 201, 198);
+}
+.home__button-edit:hover {
   background-color: rgb(16, 201, 65);
   border: 1px solid rgb(16, 201, 65);
 }
@@ -218,6 +242,10 @@ const homeButton = {
   padding: 1.5% 3%;
   margin: 2%;
   color: rgb(255, 255, 255);
+  background-color: rgb(200, 201, 198);
+  border: 1px solid rgb(200, 201, 198);
+}
+.home__button-delete:hover {
   background-color: rgb(201, 16, 19);
   border: 1px solid rgb(201, 16, 19);
 }
@@ -227,9 +255,15 @@ const homeButton = {
 .home__button {
   font-weight: bold;
   text-decoration: none;
-  padding: 1.5% 3%;
+  padding: 0.5% 1%;
   margin: 2%;
   color: rgb(255, 255, 255);
+  background-color: rgb(200, 201, 198);
+  border: 1px solid rgb(200, 201, 198);
+  transition: all 700ms linear 250ms;
+}
+.home__button:hover {
+  padding: 1.5% 3%;
   background-color: rgb(16, 201, 195);
   border: 1px solid rgb(16, 201, 195);
 }

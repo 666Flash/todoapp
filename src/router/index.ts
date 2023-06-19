@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "about" */ '../common/CreatesTasks.vue'),
   },
   {
-    path: '/edit/:id',
+    path: '/:id/edit',
     name: 'editing',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
