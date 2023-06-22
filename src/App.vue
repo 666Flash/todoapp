@@ -1,7 +1,9 @@
 <template>
-  <Transition>
-    <router-view/>
-  </Transition>
+  <router-view v-slot="{ Component }">
+    <transition>
+      <component :is="Component" />
+    </transition>
+  </router-view>
   <!-- <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>

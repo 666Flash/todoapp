@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { defineStore } from 'pinia';
 import { uid } from 'uid/secure';
 import Task from '@/common/mobel/task';
@@ -70,7 +69,7 @@ export const useTasks = defineStore('tasks', {
         completed: tasks.id === changed ? !tasks.completed : tasks.completed,
       }));
     },
-    change(removed: string, title: string, completed: boolean, dueTo: Date) {
+    change(title: string, completed: boolean, dueTo: Date, removed: string) {
       this.tasks = this.tasks.map((tasks) => ({
         ...tasks,
         title: tasks.id === removed ? title : tasks.title,
