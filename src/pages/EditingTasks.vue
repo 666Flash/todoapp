@@ -4,6 +4,7 @@
     :id=editingIdEx
     :title=titleEx
     :completed=completedEx
+    :completeds=completeds
     :dueTo=dueToEx
     buttonName="Редагувати"
     :addEditingTask=addEditingTask
@@ -28,4 +29,7 @@ const completedEx = ref(editing?.completed);
 const addEditingTask = (title: string, completed: boolean, dueTo: string, editingId: string) => {
   tasksEditing.change(title, completed, new Date(Date.parse(dueTo)), editingId);
 };
+
+const completeds = ref<[any]>([{ id: 1, text: 'Не виконано', completed: false }]);
+completeds.value.push({ id: 2, text: 'Виконано', completed: true });
 </script>

@@ -50,6 +50,7 @@ interface Props {
   id: string
   title: string
   completed: boolean
+  completeds: []
   dueTo: Date
   buttonName: string
   addEditingTask: any
@@ -73,10 +74,6 @@ const departureDate = ref(dateToString(new Date(Date.parse(`${props.dueTo.getFul
 const isRed = ref(false);
 const isRedDate = ref(false);
 const router = useRouter();
-
-const completeds = ref<[any]>([{ id: 0, text: 'Будь ласка, оберіть варіант', completed: false }]);
-completeds.value.push({ id: 1, text: 'Не виконано', completed: false });
-completeds.value.push({ id: 2, text: 'Виконано', completed: true });
 
 function choiceCompleted() {
   let flag = true;
