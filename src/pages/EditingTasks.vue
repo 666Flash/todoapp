@@ -3,8 +3,8 @@
     heading="Сторінка редагування задачі"
     :id=editingIdEx
     :title=titleEx
-    :completed=completedEx
-    :completeds=completeds
+    :completedFalse=completedFalseEx
+    :completedTrue=completedTrueEx
     :dueTo=dueToEx
     buttonName="Редагувати"
     :addEditingTask=addEditingTask
@@ -25,11 +25,16 @@ const editing = tasksEditing.tasks.find((el) => el.id === props.id);
 const editingIdEx = editing?.id;
 const titleEx = ref(editing?.title);
 const dueToEx = editing?.dueTo;
-const completedEx = ref(editing?.completed);
+const completedFalseEx = ref(false);
+const completedTrueEx = ref(false);
+
+if (editing?.completed) {
+  completedTrueEx.value = true;
+} else {
+  completedFalseEx.value = true;
+}
+
 const addEditingTask = (title: string, completed: boolean, dueTo: string, editingId: string) => {
   tasksEditing.change(title, completed, new Date(Date.parse(dueTo)), editingId);
 };
-
-const completeds = ref<[any]>([{ id: 1, text: 'Не виконано', completed: false }]);
-completeds.value.push({ id: 2, text: 'Виконано', completed: true });
 </script>

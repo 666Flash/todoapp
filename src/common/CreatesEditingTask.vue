@@ -7,11 +7,16 @@
       :class="{ error: isRed }"
       placeholder="Дані по задачі"/>
     <div class="create__section">
-      <select class="create__select" v-model="completed">
-        <option v-for="item in completeds" :key="item.id" :value="item.completed">
-          {{ item.text }}
-        </option>
-      </select>
+      <div id="create__checkboxes">
+        <label for="false">
+          <input type="checkbox" id="false" value="true" v-model="completedFalse" />
+          Не виконано
+        </label>
+        <label for="true">
+          <input type="checkbox" id="true" value="true" v-model="completedTrue" />
+          Виконано
+        </label>
+      </div>
       <input
         class="create__date"
         :class="{ errorDate: isRedDate }"
@@ -49,8 +54,8 @@ interface Props {
   heading: string
   id: string
   title: string
-  completed: boolean
-  completeds: []
+  completedFalse: boolean
+  completedTrue: boolean
   dueTo: Date
   buttonName: string
   addEditingTask: any
@@ -59,8 +64,11 @@ const props = defineProps<Props>();
 
 console.log(props.dueTo);
 const title = ref(props.title);
-const completed = ref(props.completed);
+const completed = ref(false);
+const completedFalse = ref(props.completedFalse);
+const completedTrue = ref(props.completedTrue);
 const show = ref(true);
+
 function pad(n: number, s = String(n)) {
   return s.length < 2 ? `0${s}` : s;
 }
@@ -90,7 +98,6 @@ function choiceCompleted() {
   } else {
     isRedDate.value = false;
   }
-
   if (departureDate.value.length === 10
     && new Date(Date.parse(departureDate.value)) < new Date(Date.now() - 86400000)) {
     isRedDate.value = true;
@@ -98,8 +105,14 @@ function choiceCompleted() {
   } else {
     isRedDate.value = false;
   }
+  if ((completedFalse.value && completedTrue.value)
+    || (!completedFalse.value && !completedTrue.value)) {
+    alert('Оберіть будьласка один з вареантів Не виконано або Виконано');
+    flag = false;
+  }
+
   if (flag === true) {
-    console.log(departureDate.value);
+    if (completedTrue.value) { completed.value = true; }
     props.addEditingTask(title.value, completed.value, departureDate.value, props.id);
     router.push('/');
   }
@@ -124,7 +137,7 @@ function choiceCompleted() {
   margin: 0 2%;
 }
 .create__date {
-  margin: 0 2%;
+  margin: 1% 2%;
   background-color: rgb(255, 255, 255);
 }
 .create__button {

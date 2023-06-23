@@ -3,8 +3,8 @@
     heading="Сторінка створення задачі"
     id=""
     title=""
-    :completed=false
-    :completeds=completeds
+    :completedFalse=false
+    :completedTrue=false
     :dueTo=dueToEx
     buttonName="Створити"
     :addEditingTask=addEditingTask
@@ -21,8 +21,4 @@ const taskStop = useTasks();
 const addEditingTask = (title: string, completed: boolean, dueTo: string) => {
   taskStop.addtask(title, completed, new Date(Date.parse(dueTo)));
 };
-
-const completeds = ref<[any]>([{ id: 0, text: 'Будь ласка, оберіть варіант', completed: false }]);
-completeds.value.push({ id: 1, text: 'Не виконано', completed: false });
-completeds.value.push({ id: 2, text: 'Виконано', completed: true });
 </script>
