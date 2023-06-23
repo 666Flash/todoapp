@@ -2,12 +2,6 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import HomeView from '@/pages/HomeView.vue';
 import { home, create, editing } from '@/router/routers';
 
-// export function routerEditing(id: string) {
-//   return {
-//     name: `/editing/${id}`,
-//   };
-// }
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: home,
