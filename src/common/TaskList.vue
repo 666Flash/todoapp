@@ -32,9 +32,7 @@
           </button>
         </div>
         <div class="home__tasks">
-          {{ (pad(item.dueTo.getDate()) + '.'
-            + pad(item.dueTo.getMonth()+1) + '.'
-            + item.dueTo.getFullYear()) }}
+            {{ parsingDate(item.dueTo) }}
         </div>
         <section class="home__tasks section__tasks-button">
           <router-link
@@ -60,6 +58,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useTasks } from '@/stores/tasks';
+import parsingDate from '@/common/utils/date';
 
 const tasksStore = useTasks();
 const show = ref(true);
@@ -68,10 +67,6 @@ function routerEditing(id: string) {
   return {
     path: `/${id}/edit`,
   };
-}
-
-function pad(n: number, s = String(n)) {
-  return s.length < 2 ? `0${s}` : s;
 }
 
 tasksStore.sortByDueTo();

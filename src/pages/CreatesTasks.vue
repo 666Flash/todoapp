@@ -1,24 +1,23 @@
 <template>
-  <CreatesEditingTask
+  <TaskForm
     heading="Сторінка створення задачі"
     id=""
     title=""
-    :completedFalse=false
-    :completedTrue=false
-    :dueTo=dueToEx
-    buttonName="Створити"
-    :addEditingTask=addEditingTask
+    :complet="false"
+    :due-to="dueToEx"
+    button-name="Створити"
+    :submit="addTask"
   />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useTasks } from '@/stores/tasks';
-import CreatesEditingTask from '@/common/CreatesEditingTask.vue';
+import TaskForm from '@/common/TaskForm.vue';
 
 const dueToEx = new Date();
 const taskStop = useTasks();
-const addEditingTask = (title: string, completed: boolean, dueTo: string) => {
+const addTask = (title: string, completed: boolean, dueTo: string) => {
   taskStop.addtask(title, completed, new Date(Date.parse(dueTo)));
 };
 </script>

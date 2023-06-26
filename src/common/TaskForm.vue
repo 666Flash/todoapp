@@ -1,5 +1,5 @@
 <template>
-  <form class="create" v-if="show">
+  <form class="create" v-if="show" @submit.prevent="choiceCompleted">
     <header class="create__header">{{ heading }}</header>
     <input
       v-model.trim="title"
@@ -7,14 +7,15 @@
       :class="{ error: isRed }"
       placeholder="Дані по задачі"/>
     <div class="create__section">
-      <div id="create__checkboxes">
+      <div id="create__checkboxes" class="create__checkboxes">
         <label for="false">
-          <input type="checkbox" id="false" value="true" v-model="completedFalse" />
-          Не виконано
-        </label>
-        <label for="true">
-          <input type="checkbox" id="true" value="true" v-model="completedTrue" />
-          Виконано
+          <input
+            type="checkbox"
+            id="false"
+            value="completed"
+            v-model="completed"
+            @click="completedCheckbox(!completed)" />
+          {{ completedText }}
         </label>
       </div>
       <input
@@ -24,15 +25,14 @@
         v-model="departureDate"/>
     </div>
     <div class="create-section__button">
-      <router-link
-      type="button"
+      <button
+      type="submit"
       id="button-create"
       class="create__button"
       to="#"
-      @click=choiceCompleted
       >
         {{ buttonName }}
-      </router-link>
+      </button>
       <button type="reset" id="button-clear" class="create__button">Очистити</button>
       <router-link
         id="button-cancel"
@@ -54,20 +54,28 @@ interface Props {
   heading: string
   id: string
   title: string
-  completedFalse: boolean
-  completedTrue: boolean
+  complet: boolean
   dueTo: Date
   buttonName: string
-  addEditingTask: any
+  submit: any
 }
 const props = defineProps<Props>();
 
-console.log(props.dueTo);
 const title = ref(props.title);
-const completed = ref(false);
-const completedFalse = ref(props.completedFalse);
-const completedTrue = ref(props.completedTrue);
+const completed = ref(props.complet);
 const show = ref(true);
+
+const completedText = ref();
+function completedCheckbox(complit: boolean) {
+  console.log('complit');
+  console.log(complit);
+  if (complit) {
+    completedText.value = 'Виконано';
+  } else {
+    completedText.value = 'Не виконано';
+  }
+}
+completedCheckbox(completed.value);
 
 function pad(n: number, s = String(n)) {
   return s.length < 2 ? `0${s}` : s;
@@ -105,15 +113,9 @@ function choiceCompleted() {
   } else {
     isRedDate.value = false;
   }
-  if ((completedFalse.value && completedTrue.value)
-    || (!completedFalse.value && !completedTrue.value)) {
-    alert('Оберіть будьласка один з вареантів Не виконано або Виконано');
-    flag = false;
-  }
 
   if (flag === true) {
-    if (completedTrue.value) { completed.value = true; }
-    props.addEditingTask(title.value, completed.value, departureDate.value, props.id);
+    props.submit(title.value, completed.value, departureDate.value, props.id);
     router.push('/');
   }
 }
@@ -135,6 +137,10 @@ function choiceCompleted() {
 .create__section {
   padding: 2% 0 1%;
   margin: 0 2%;
+}
+.create__checkboxes {
+  margin: 0 45% 0 46%;
+  text-align: left;
 }
 .create__date {
   margin: 1% 2%;
