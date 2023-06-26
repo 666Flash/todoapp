@@ -62,6 +62,9 @@ export const useTasks = defineStore('tasks', {
     },
     delete(removed: string) {
       this.tasks = this.tasks.filter((tasks) => tasks.id !== removed);
+      if (this.tasks.length < 1) {
+        alert('Не має жодної задачі!!!');
+      }
     },
     togolStatus(changed: string) {
       this.tasks = this.tasks.map((tasks) => ({

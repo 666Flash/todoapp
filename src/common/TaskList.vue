@@ -37,7 +37,6 @@
         <section class="home__tasks section__tasks-button">
           <router-link
             class="home__button-edit"
-            @click="show = !show"
             :to="routerEditing(item.id)"
           >
             Редагування задачі
@@ -56,12 +55,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useTasks } from '@/stores/tasks';
 import parsingDate from '@/common/utils/date';
 
 const tasksStore = useTasks();
-const show = ref(true);
 
 function routerEditing(id: string) {
   return {

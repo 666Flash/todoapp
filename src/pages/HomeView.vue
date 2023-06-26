@@ -1,5 +1,5 @@
 <template>
-  <div class="home" v-if="show">
+  <div class="home">
     <TaskList />
     <section class="section__button">
       <router-link
@@ -7,7 +7,6 @@
         id="button-home"
         class="home__button"
         to="/create"
-        @click="show = !show"
       >
         Cтворення новоЇ задачі
       </router-link>
@@ -30,7 +29,6 @@ import TaskList from '@/common/TaskList.vue';
 import HomeStatistics from '@/common/HomeStatistics.vue';
 
 const tasksStore = useTasks();
-const show = ref(true);
 const sortStan = ref(true);
 </script>
 

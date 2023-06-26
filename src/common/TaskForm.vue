@@ -1,5 +1,5 @@
 <template>
-  <form class="create" v-if="show" @submit.prevent="choiceCompleted">
+  <form class="create" @submit.prevent="choiceCompleted">
     <header class="create__header">{{ heading }}</header>
     <input
       v-model.trim="title"
@@ -38,7 +38,6 @@
         id="button-cancel"
         class="create__button"
         to="/"
-        @click="show = !show"
       >
         Скасувати
       </router-link>
@@ -63,7 +62,6 @@ const props = defineProps<Props>();
 
 const title = ref(props.title);
 const completed = ref(props.complet);
-const show = ref(true);
 
 const completedText = ref();
 function completedCheckbox(complit: boolean) {
