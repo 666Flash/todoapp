@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useTasks } from '@/stores/tasks';
 import TaskForm from '@/common/TaskForm.vue';
 
