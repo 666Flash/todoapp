@@ -14,7 +14,6 @@ taskStop.addTask('Murphy', false, new Date(Date.parse('2023-06-30')));
 taskStop.addTask('gasjdjss', true, new Date(Date.parse('2023-06-30')));
 taskStop.addTask('Yxbxmzxm', true, new Date(Date.parse('2023-04-27')));
 taskStop.addTask('agshsjajaj', false, new Date(Date.parse('2023-04-27')));
-taskStop.listCheck();
 </script>
 
 <style>

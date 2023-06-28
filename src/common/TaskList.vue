@@ -1,57 +1,60 @@
 <template>
-  <TransitionGroup tag="ul" name="fade" @after-leave="tasksStore.listCheck">
-    <TransitionGroup
-      class="home__group"
-      v-for="items in groupByDueTo(tasksStore.tasks)"
-      :key="items.id"
-      tag="ul"
-      name="fade"
-    >
+  <div v-if="tasksStore.listCheck()">
+    <TransitionGroup tag="ul" name="fade">
       <TransitionGroup
-        class="container"
-        v-for="item in items"
-        :key="item.id"
+        class="home__group"
+        v-for="items in groupByDueTo(tasksStore.tasks)"
+        :key="items.id"
         tag="ul"
         name="fade"
       >
-        <div class="home__tasks">
-          {{ item.title }}
-        </div>
-        <div class="home__tasks">
-          <button type="button" class="home__completed"
-            v-if="item.completed" @click="tasksStore.togolStatus(item.id)">
-            Виконано
-          </button>
-          <button
-            type="button"
-            class="home__completed"
-            v-else
-            @click="tasksStore.togolStatus(item.id)"
-          >
-            Не виконано
-          </button>
-        </div>
-        <div class="home__tasks">
-            {{ parsingDate(item.dueTo) }}
-        </div>
-        <section class="home__tasks section__tasks-button">
-          <router-link
-            class="home__button-edit"
-            :to="routerEditing(item.id)"
-          >
-            Редагування задачі
-          </router-link>
-          <button
-            type="button"
-            @click="tasksStore.delete(item.id)"
-            class="home__button-delete"
-          >
-            Видалення задачі
-          </button>
-        </section>
+        <TransitionGroup
+          class="container"
+          v-for="item in items"
+          :key="item.id"
+          tag="ul"
+          name="fade"
+        >
+          <div class="home__tasks">
+            {{ item.title }}
+          </div>
+          <div class="home__tasks">
+            <button type="button" class="home__completed"
+              v-if="item.completed" @click="tasksStore.togolStatus(item.id)">
+              Виконано
+            </button>
+            <button
+              type="button"
+              class="home__completed"
+              v-else
+              @click="tasksStore.togolStatus(item.id)"
+            >
+              Не виконано
+            </button>
+          </div>
+          <div class="home__tasks">
+              {{ parsingDate(item.dueTo) }}
+          </div>
+          <section class="home__tasks section__tasks-button">
+            <router-link
+              class="home__button-edit"
+              :to="routerEditing(item.id)"
+            >
+              Редагування задачі
+            </router-link>
+            <button
+              type="button"
+              @click="tasksStore.deleteForId(item.id), tasksStore.listCheck()"
+              class="home__button-delete"
+            >
+              Видалення задачі
+            </button>
+          </section>
+        </TransitionGroup>
       </TransitionGroup>
     </TransitionGroup>
-  </TransitionGroup>
+  </div>
+  <div v-else>Не має жодної задачі!!!</div>
 </template>
 
 <script setup lang="ts">
