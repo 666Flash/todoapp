@@ -16,8 +16,13 @@ export const useTasks = defineStore('tasks', {
     unfinishedTasks: (state) => state.tasks.filter((tasks) => tasks.completed === false).length,
   },
   actions: {
-    addtask(title: string, completed: boolean, dueTo: Date) {
+    addTask(title: string, completed: boolean, dueTo: Date) {
       this.tasks.push(new Task(uid(), title, completed, dueTo));
+    },
+    listCheck() {
+      if (this.tasks.length < 1) {
+        alert('Не має жодної задачі!!!');
+      }
     },
     sortByStatus(sort: boolean) {
       this.tasks = this.tasks.sort((a, b) => {
@@ -60,11 +65,17 @@ export const useTasks = defineStore('tasks', {
         }, {});
       };
     },
+    completedCheckbox(complit: boolean) {
+      let completedText = '';
+      if (complit) {
+        completedText = 'Виконано';
+      } else {
+        completedText = 'Не виконано';
+      }
+      return completedText;
+    },
     delete(removed: string) {
       this.tasks = this.tasks.filter((tasks) => tasks.id !== removed);
-      if (this.tasks.length < 1) {
-        alert('Не має жодної задачі!!!');
-      }
     },
     togolStatus(changed: string) {
       this.tasks = this.tasks.map((tasks) => ({

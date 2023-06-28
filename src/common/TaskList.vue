@@ -1,5 +1,5 @@
 <template>
-  <TransitionGroup tag="ul" name="fade">
+  <TransitionGroup tag="ul" name="fade" @after-leave="tasksStore.listCheck">
     <TransitionGroup
       class="home__group"
       v-for="items in groupByDueTo(tasksStore.tasks)"

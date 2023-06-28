@@ -3,20 +3,22 @@
     heading="Сторінка створення задачі"
     id=""
     title=""
-    :complet="false"
+    :condition="false"
     :due-to="dueToEx"
     button-name="Створити"
-    :submit="addTask"
+    @submit="addTask"
   />
 </template>
 
 <script setup lang="ts">
 import { useTasks } from '@/stores/tasks';
 import TaskForm from '@/common/TaskForm.vue';
+import { TaskData } from '@/common/mobel/task';
 
 const dueToEx = new Date();
 const taskStop = useTasks();
-const addTask = (title: string, completed: boolean, dueTo: string) => {
-  taskStop.addtask(title, completed, new Date(Date.parse(dueTo)));
-};
+
+function addTask(data: Omit<TaskData, 'id'>) {
+  taskStop.addTask(data.title, data.completed, data.dueTo);
+}
 </script>

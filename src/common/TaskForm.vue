@@ -14,8 +14,8 @@
             id="false"
             value="completed"
             v-model="completed"
-            @click="completedCheckbox(!completed)" />
-          {{ completedText }}
+            @click="taskStop.completedCheckbox(!completed)" />
+          {{ taskStop.completedCheckbox(completed) }}
         </label>
       </div>
       <input
@@ -46,38 +46,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
+import { useTasks } from '@/stores/tasks';
+import pad from '@/common/utils/pad';
+import { TaskData } from '@/common/mobel/task';
 
 interface Props {
   heading: string
   id: string
   title: string
-  complet: boolean
+  condition: boolean
   dueTo: Date
   buttonName: string
-  submit: any
 }
 const props = defineProps<Props>();
 
+interface Emits {
+  (event: 'submit', payload: Omit<TaskData, 'id'>): void;
+  (event: 'submit', payload: TaskData): void;
+}
+const emit = defineEmits<Emits>();
+
+const taskStop = useTasks();
 const title = ref(props.title);
-const completed = ref(props.complet);
+const completed = ref(props.condition);
 
-const completedText = ref();
-function completedCheckbox(complit: boolean) {
-  console.log('complit');
-  console.log(complit);
-  if (complit) {
-    completedText.value = 'Виконано';
-  } else {
-    completedText.value = 'Не виконано';
-  }
-}
-completedCheckbox(completed.value);
-
-function pad(n: number, s = String(n)) {
-  return s.length < 2 ? `0${s}` : s;
-}
 function dateToString(date: Date) {
   return (
     `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`);
@@ -113,7 +107,12 @@ function choiceCompleted() {
   }
 
   if (flag === true) {
-    props.submit(title.value, completed.value, departureDate.value, props.id);
+    emit('submit', {
+      title: title.value,
+      completed: completed.value,
+      dueTo: new Date(Date.parse(departureDate.value)),
+      id: props.id,
+    });
     router.push('/');
   }
 }

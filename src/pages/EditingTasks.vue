@@ -3,10 +3,10 @@
     heading="Сторінка редагування задачі"
     :id="idEx"
     :title="titleEx"
-    :complet="completedEx"
+    :condition="completedEx"
     :due-to="dueToEx"
     button-name="Редагувати"
-    :submit="editingTask"
+    @submit="editingTask"
   />
 </template>
 
@@ -14,10 +14,12 @@
 import { defineProps } from 'vue';
 import { useTasks } from '@/stores/tasks';
 import TaskForm from '@/common/TaskForm.vue';
+import { TaskData } from '@/common/mobel/task';
 
 interface Props {
   id: string
 }
+
 const props = defineProps<Props>();
 const tasksEditing = useTasks();
 const editing = tasksEditing.tasks.find((el) => el.id === props.id);
@@ -26,7 +28,7 @@ const titleEx = editing?.title;
 const completedEx = editing?.completed;
 const dueToEx = editing?.dueTo;
 
-const editingTask = (title: string, completed: boolean, dueTo: string, editingId: string) => {
-  tasksEditing.change(title, completed, new Date(Date.parse(dueTo)), editingId);
-};
+function editingTask(data: TaskData) {
+  tasksEditing.change(data.title, data.completed, data.dueTo, data.id);
+}
 </script>
