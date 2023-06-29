@@ -14,7 +14,7 @@
 import { defineProps } from 'vue';
 import { useTasks } from '@/stores/tasks';
 import TaskForm from '@/common/TaskForm.vue';
-import { TaskData } from '@/common/mobel/task';
+import { TaskData } from '@/common/model/task';
 
 interface Props {
   id: string

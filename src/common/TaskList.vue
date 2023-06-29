@@ -20,14 +20,14 @@
           </div>
           <div class="home__tasks">
             <button type="button" class="home__completed"
-              v-if="item.completed" @click="tasksStore.togolStatus(item.id)">
+              v-if="item.completed" @click="tasksStore.changeStatus(item.id)">
               Виконано
             </button>
             <button
               type="button"
               class="home__completed"
               v-else
-              @click="tasksStore.togolStatus(item.id)"
+              @click="tasksStore.changeStatus(item.id)"
             >
               Не виконано
             </button>

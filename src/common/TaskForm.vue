@@ -50,7 +50,7 @@ import { ref, defineProps, defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
 import { useTasks } from '@/stores/tasks';
 import pad from '@/common/utils/pad';
-import { TaskData } from '@/common/mobel/task';
+import { TaskData } from '@/common/model/task';
 
 interface Props {
   heading: string

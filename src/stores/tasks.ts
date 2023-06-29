@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { uid } from 'uid/secure';
-import Task from '@/common/mobel/task';
+import Task from '@/common/model/task';
 
 export const useTasks = defineStore('tasks', () => {
   const tasks = ref<Task[]>([]);
@@ -63,9 +63,9 @@ export const useTasks = defineStore('tasks', () => {
       }, {});
     };
   }
-  function completedCheckbox(complit: boolean) {
+  function completedCheckbox(finished: boolean) {
     let completedText = '';
-    if (complit) {
+    if (finished) {
       completedText = 'Виконано';
     } else {
       completedText = 'Не виконано';
@@ -75,7 +75,7 @@ export const useTasks = defineStore('tasks', () => {
   function deleteForId(removed: string) {
     tasks.value = tasks.value.filter((task) => task.id !== removed);
   }
-  function togolStatus(changed: string) {
+  function changeStatus(changed: string) {
     tasks.value = tasks.value.map((task) => ({
       ...task,
       completed: task.id === changed ? !task.completed : task.completed,
@@ -102,7 +102,7 @@ export const useTasks = defineStore('tasks', () => {
     groupBy,
     completedCheckbox,
     deleteForId,
-    togolStatus,
+    changeStatus,
     change,
   };
 });
