@@ -1,5 +1,5 @@
 <template>
-  <div v-if="tasksStore.listCheck()">
+  <div v-if="tasksStore.listCheck">
     <TransitionGroup tag="ul" name="fade">
       <TransitionGroup
         class="home__group"
@@ -44,7 +44,7 @@
             </router-link>
             <button
               type="button"
-              @click="tasksStore.deleteForId(item.id), tasksStore.listCheck()"
+              @click="tasksStore.deleteForId(item.id), tasksStore.listCheck"
               class="home__button-delete"
             >
               Видалення задачі

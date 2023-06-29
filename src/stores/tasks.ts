@@ -12,15 +12,15 @@ export const useTasks = defineStore('tasks', () => {
   const unfinishedTasks = computed(() => tasks.value.filter(
     (task) => task.completed === false,
   ).length);
-
-  function addTask(title: string, completed: boolean, dueTo: Date) {
-    tasks.value.push(new Task(uid(), title, completed, dueTo));
-  }
-  function listCheck() {
+  const listCheck = computed(() => {
     if (tasks.value.length < 1) {
       return false;
     }
     return true;
+  });
+
+  function addTask(title: string, completed: boolean, dueTo: Date) {
+    tasks.value.push(new Task(uid(), title, completed, dueTo));
   }
   function sortByStatus(sort: boolean) {
     tasks.value = tasks.value.sort((a: any, b: any) => {
